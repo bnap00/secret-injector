@@ -9,7 +9,11 @@ running service uses it, and rolls back if anything fails. The agent only ever s
 
 ## Install
 
-Copy this directory to `~/.claude/skills/secret-injector` (all projects) or
+```
+npx skills add bnap00/secret-injector
+```
+
+Or copy this directory to `~/.claude/skills/secret-injector` (all projects) or
 `.claude/skills/secret-injector` inside a project. Requirements: Python 3.8+, `ssh` for remote
 targets, and the Tailscale CLI if you use the `tailscale` reach.
 
