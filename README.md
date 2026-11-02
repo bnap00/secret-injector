@@ -55,6 +55,18 @@ templates/sink.py            validate → write → restart → verify → rollb
 reference/                   styles, recipes, worked example
 ```
 
+## Contributing
+
+Install the pre-commit secret scan once per clone so a stray key never gets committed:
+
+```
+pipx install pre-commit   # or: pip install pre-commit
+pre-commit install
+```
+
+CI runs Gitleaks, Semgrep and CodeQL on every push and PR. To report a vulnerability, see
+[SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT

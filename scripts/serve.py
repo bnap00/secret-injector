@@ -237,6 +237,8 @@ class H(http.server.BaseHTTPRequestHandler):
             data = {f["name"]: q.get(f["name"], [""])[0] for f in fields}
             values = [v for v in data.values() if v]
             try:
+                # sink is the operator's own argv (no shell); form data goes only to stdin.
+                # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-tainted-env-args.dangerous-subprocess-use-tainted-env-args
                 r = subprocess.run(sink, input=json.dumps(data) + "\n", capture_output=True, text=True,
                                    timeout=a.sink_timeout)
                 out, rc = r.stdout.strip(), r.returncode
