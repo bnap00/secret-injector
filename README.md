@@ -57,14 +57,14 @@ reference/                   styles, recipes, worked example
 
 ## Contributing
 
-Install the pre-commit secret scan once per clone so a stray key never gets committed:
+Install the pre-commit secret scan once per clone to scan staged changes before commit:
 
 ```
 pipx install pre-commit   # or: pip install pre-commit
 pre-commit install
 ```
 
-CI runs Gitleaks, Semgrep and CodeQL on every push and PR. To report a vulnerability, see
+CI runs Gitleaks, Semgrep and CodeQL on pushes to `main`, on every PR and weekly. To report a vulnerability, see
 [SECURITY.md](SECURITY.md).
 
 ## License

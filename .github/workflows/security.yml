@@ -30,7 +30,10 @@ jobs:
           echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/$f" | sha256sum -c -
           tar -xzf "$RUNNER_TEMP/$f" -C "$RUNNER_TEMP" gitleaks
       - name: Scan full history
-        run: '"$RUNNER_TEMP/gitleaks" git --redact --verbose .'
+        # Same as gitleaks' default log opts, plus first-parent diffs so merge commits are scanned.
+        run: >-
+          "$RUNNER_TEMP/gitleaks" git --redact --verbose
+          --log-opts='--full-history --all --diff-filter=tuxdb --diff-merges=first-parent' .
 
   semgrep:
     runs-on: ubuntu-latest
@@ -41,4 +44,4 @@ jobs:
         with:
           persist-credentials: false
       - name: Semgrep CE
-        run: docker run --rm -v "$PWD:/src" -w /src "$SEMGREP_IMAGE" semgrep scan --config p/python --metrics=off --error
+        run: docker run --rm -v "$PWD:/src" -w /src "$SEMGREP_IMAGE" semgrep scan --config p/python --metrics=off --error --strict
