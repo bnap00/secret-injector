@@ -95,9 +95,15 @@ elif a.reach == "lan":
     if not bind or not ipaddress.ip_address(bind).is_private or ipaddress.ip_address(bind) in TS_NET:
         sys.exit(f"error: LAN address {bind!r} is not a private network address; refusing to serve on it")
 else:
-    bind = (tailscale("ip", "-4") or "").split("\n")[0].strip()
-    if not bind or ipaddress.ip_address(bind) not in TS_NET:
+    # Never fall back to "" (which would bind every interface): exit unless we got a real tailnet IP.
+    out = tailscale("ip", "-4")
+    try:
+        addr = ipaddress.ip_address(out.split()[0]) if out else None
+    except (IndexError, ValueError):  # whitespace-only or non-IP output
+        addr = None
+    if addr is None or addr not in TS_NET:
         sys.exit("error: no Tailscale IPv4 address (is tailscale up?). Use --reach local or lan instead.")
+    bind = str(addr)
     ALLOWED_LOGINS = set(a.allow_user) or ({self_login()} - {None})
     if not ALLOWED_LOGINS:
         sys.exit("error: this node is tagged / has no owning user; pass --allow-user you@example.com")
